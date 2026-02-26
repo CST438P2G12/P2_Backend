@@ -30,4 +30,8 @@ public class Workout {
         this.user = user;
         this.date = date;
     }
+
+    public long getId() { return id; }
+    public User getUser() { return user; }
+    public LocalDate getDate() { return date; }
 }
