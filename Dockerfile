@@ -2,7 +2,12 @@
 FROM gradle:jdk17 AS builder
 WORKDIR /app
 COPY . .
-RUN gradle clean build
+
+RUN --mount=type=secret,id=secret,target=.env \
+    export GOOGLE_APPLICATION_CREDENTIALS=/tmp/.env && \
+    gradle clean build
+
+# RUN gradle clean build
 
 # Stage 2: Create the final runtime image
 FROM eclipse-temurin:17

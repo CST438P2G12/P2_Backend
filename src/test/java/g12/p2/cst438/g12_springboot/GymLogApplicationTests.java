@@ -8,6 +8,7 @@ class GymLogApplicationTests {
 
     @Test
     void contextLoads() {
+        assert(true);
     }
 
 }
