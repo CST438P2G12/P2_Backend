@@ -7,8 +7,7 @@ import jakarta.persistence.*;
 public class Exercise {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
+    private long exerciseId;
 
     @ManyToOne
     @JoinColumn(name = "workoutId")
@@ -26,7 +25,7 @@ public class Exercise {
         this.reps = reps;
     }
 
-    public long getId() { return id; }
+    public long getId() { return exerciseId; }
     public Workout getWorkout() { return workout; }
     public String getExerciseName() { return exerciseName; }
     public int getSets() { return sets; }
@@ -34,7 +33,7 @@ public class Exercise {
 
     @Override
     public String toString() {
-        return "Exercise [id=" + id + ", exerciseName=" + exerciseName +
+        return "Exercise [id=" + exerciseId + ", exerciseName=" + exerciseName +
                 ", sets=" + sets + ", reps=" + reps + "]";
     }
 }
