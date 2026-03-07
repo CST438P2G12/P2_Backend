@@ -11,7 +11,7 @@ public class Exercise {
 
 
     @ManyToOne
-    @JoinColumn(name = "workout_id")
+    @JoinColumn(name = "workoutId")
     private Workout workout;
     private String exerciseName;
     private int reps;

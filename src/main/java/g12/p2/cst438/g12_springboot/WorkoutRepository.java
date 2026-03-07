@@ -11,9 +11,9 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long> {
     @Query(value = "SELECT * FROM \"Workout\"", nativeQuery = true)
     List<Workout> getAllWorkouts();
 
-    @Query(value = "SELECT * FROM \"Workout\" WHERE id = :id", nativeQuery = true)
+    @Query(value = "SELECT * FROM \"Workout\" WHERE workoutId = :id", nativeQuery = true)
     Workout getById(long id);
 
-    @Query(value = "SELECT * FROM \"Workout\" WHERE user_id = :userId", nativeQuery = true)
+    @Query(value = "SELECT * FROM \"Workout\" WHERE userId = :userId", nativeQuery = true)
     List<Workout> getByUserId(long userId);
 }
