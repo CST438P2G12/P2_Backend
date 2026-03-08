@@ -62,8 +62,8 @@ public class WorkoutControllerTest {
 
         ResponseEntity<Workout> result = workoutController.getWorkoutById(1L);
 
-        assertNotNull(result);
-        assertEquals(workout, result);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(workout, result.getBody());
     }
 
     @Test
@@ -81,19 +81,19 @@ public class WorkoutControllerTest {
                                             new Workout(user, LocalDate.of(1900, 1, 2)));
                 when(workoutRepository.getByUserId(user.getId())).thenReturn(workouts);
 
-        List<Workout> result = workoutController.getWorkoutsByUser(user.getId());
+        ResponseEntity<List<Workout>> result = workoutController.getWorkoutsByUser(user.getId());
 
-        assertFalse(result.isEmpty());
-        assertEquals(workouts, result);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(workouts, result.getBody());
     }
 
     @Test
     void getWorkoutsByUser_returnsNull() {
         when(workoutRepository.getByUserId(1L)).thenReturn(null);
 
-        List<Workout> result = workoutController.getWorkoutsByUser(1L);
+        ResponseEntity<List<Workout>> result = workoutController.getWorkoutsByUser(1L);
 
-        assertNull(result);
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
     }
 
     @Test
