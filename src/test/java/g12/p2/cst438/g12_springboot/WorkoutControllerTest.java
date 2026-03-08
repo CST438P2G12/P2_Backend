@@ -7,12 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class WorkoutControllerTest {
 
@@ -92,5 +94,54 @@ public class WorkoutControllerTest {
         List<Workout> result = workoutController.getWorkoutsByUser(1L);
 
         assertNull(result);
+    }
+
+    @Test
+    void addWorkout_successfullyAddsWorkout() {
+        when(workoutRepository.save(workout)).thenReturn(workout);
+
+        ResponseEntity<Workout> result = workoutController.addWorkout(workout);
+
+        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(workout, result.getBody());
+    }
+
+    @Test
+    void updateWorkout_successfullyUpdatesWorkout() {
+        when(workoutRepository.existsById(workout.getId())).thenReturn(true);
+        when(workoutRepository.save(workout)).thenReturn(workout);
+
+        ResponseEntity<Workout> result = workoutController.updateWorkout(workout);
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(workout, result.getBody());
+    }
+
+    @Test
+    void updateWorkout_404_WhenWorkoutNotFound() {
+        when(workoutRepository.existsById(workout.getId())).thenReturn(false);
+
+        ResponseEntity<Workout> result = workoutController.updateWorkout(workout);
+
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+        assertNull(result.getBody());
+    }
+
+    @Test
+    void deleteWorkout_successfullyDeletesWorkout() {
+        when(workoutRepository.existsById(workout.getId())).thenReturn(true);
+
+        ResponseEntity<Void> result = workoutController.deleteWorkout(workout.getId());
+
+        assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
+    }
+
+    @Test
+    void deleteWorkout_404_WhenWorkoutNotFound() {
+        when(workoutRepository.existsById(workout.getId())).thenReturn(false);
+
+        ResponseEntity<Void> result = workoutController.deleteWorkout(workout.getId());
+
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
     }
 }
