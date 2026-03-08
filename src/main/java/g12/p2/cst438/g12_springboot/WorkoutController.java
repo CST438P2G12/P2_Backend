@@ -23,7 +23,7 @@ public class WorkoutController {
 
     @GetMapping("/getWorkoutById")
     public Workout getWorkoutById(Long id) {
-        return workoutRepository.getById(id);
+        return workoutRepository.getByWorkoutId(id);
     }
 
     @GetMapping("/getWorkoutsByUser")
