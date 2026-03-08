@@ -10,7 +10,5 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Set Up Gradle
-        uses: gradle/actions/setup-gradle@v3
       - name: Run tests
         run: ./gradlew test
