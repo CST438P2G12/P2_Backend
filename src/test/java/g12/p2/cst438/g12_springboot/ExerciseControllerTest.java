@@ -126,4 +126,58 @@ public class ExerciseControllerTest {
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
+
+    @Test
+    void patchExerciseReps_successfullyUpdatesReps() {
+        Mockito.when(exerciseRepository.existsById(exercise.getId())).thenReturn(true);
+
+        ResponseEntity<Void> response = exerciseController.patchExerciseReps(exercise.getId(), 4);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    void patchExerciseReps_404_ifNoExerciseFound() {
+        Mockito.when(exerciseRepository.existsById(1L)).thenReturn(false);
+
+        ResponseEntity<Void> response = exerciseController.patchExerciseReps(exercise.getId(), 4);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void patchExerciseSets_successfullyUpdatesSets() {
+        Mockito.when(exerciseRepository.existsById(exercise.getId())).thenReturn(true);
+
+        ResponseEntity<Void> response = exerciseController.patchExerciseSets(exercise.getId(), 4);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    void patchExerciseSets_404_ifNoExerciseFound() {
+        Mockito.when(exerciseRepository.existsById(1L)).thenReturn(false);
+
+        ResponseEntity<Void> response = exerciseController.patchExerciseSets(exercise.getId(), 4);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void deleteExercise_successfullyDeletesExercise() {
+        Mockito.when(exerciseRepository.existsById(exercise.getId())).thenReturn(true);
+
+        ResponseEntity<Void> response = exerciseController.deleteExercise(exercise);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+    }
+
+    @Test
+    void deleteExercise_404_ifNoExerciseFound() {
+        Mockito.when(exerciseRepository.existsById(1L)).thenReturn(false);
+
+        ResponseEntity<Void> response = exerciseController.deleteExercise(exercise);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 }
