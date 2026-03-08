@@ -16,14 +16,27 @@ public class WorkoutController {
         this.workoutRepository = workoutRepository;
     }
 
+    /**
+     * GET endpoint to get all Workouts present in the DB.
+     * @return Java List with all workouts in the DB.
+     */
     @GetMapping("/getAllWorkouts")
     public List<Workout> getAllWorkouts() {
         return workoutRepository.getAllWorkouts();
     }
 
+    /**
+     * GET endpoint to get a single Workout by its ID.
+     * @param id ID of the workout to get from the DB.
+     * @return Workout object with the given ID, or an HTTP 404 if no such Workout exists.
+     */
     @GetMapping("/getWorkoutById")
-    public Workout getWorkoutById(Long id) {
-        return workoutRepository.getByWorkoutId(id);
+    public ResponseEntity<Workout> getWorkoutById(Long id) {
+        Workout workout = workoutRepository.getByWorkoutId(id);
+        if (workout == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(workout);
     }
 
     @GetMapping("/getWorkoutsByUser")

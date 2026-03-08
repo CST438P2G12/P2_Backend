@@ -60,7 +60,7 @@ public class WorkoutControllerTest {
     void getWorkoutById_returnsWorkout() {
         when(workoutRepository.getByWorkoutId(1L)).thenReturn(workout);
 
-        Workout result = workoutController.getWorkoutById(1L);
+        ResponseEntity<Workout> result = workoutController.getWorkoutById(1L);
 
         assertNotNull(result);
         assertEquals(workout, result);
@@ -70,9 +70,9 @@ public class WorkoutControllerTest {
     void getWorkoutById_returnsNull() {
         when(workoutRepository.getByWorkoutId(1L)).thenReturn(null);
 
-        Workout testWorkout = workoutController.getWorkoutById(1L);
+        ResponseEntity<Workout> testWorkout = workoutController.getWorkoutById(1L);
 
-        assertNull(testWorkout);
+        assertEquals(HttpStatus.NOT_FOUND, testWorkout.getStatusCode());
     }
 
     @Test
