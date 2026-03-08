@@ -58,13 +58,22 @@ public class ExerciseController {
         return ResponseEntity.ok(exercise);
     }
 
-    @PatchMapping("/patchExercise")
-    public ResponseEntity<Exercise> patchExercise(@RequestBody Exercise exercise) {
-        if (!exerciseRepository.existsById(exercise.getId())) {
+    @PatchMapping("/patchExercise/reps")
+    public ResponseEntity<Void> patchExerciseReps(@RequestBody Long id, @RequestBody int reps) {
+        if (!exerciseRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        exerciseRepository.save(exercise);
-        return ResponseEntity.ok(exercise);
+        exerciseRepository.updateRepsById(id, reps);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/patchExercise/sets")
+    public ResponseEntity<Void> patchExerciseSets(@RequestBody Long id, @RequestBody int sets) {
+        if (!exerciseRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        exerciseRepository.updateSetsById(id, sets);
+        return ResponseEntity.ok().build();
     }
 
 
