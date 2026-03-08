@@ -14,7 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> getAllUsers();
 
     @Query(value = "SELECT * FROM \"User\" WHERE id = :id", nativeQuery = true)
-    User getById(long id);
+    User getUserById(Long id);
 
     @Query(value = "SELECT * FROM \"User\" WHERE name = :name", nativeQuery = true)
     User getByName(String name);
@@ -22,5 +22,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM \"User\" WHERE id = :id", nativeQuery = true)
-    void deleteById(long id);
+    void deleteById(Long id);
 }

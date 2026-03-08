@@ -58,7 +58,7 @@ class AdminControllerTest {
 
     @Test
     void getUserById_returnsUser_whenUserExists() {
-        when(userRepository.getById(1L)).thenReturn(testUser);
+        when(userRepository.getUserById(1L)).thenReturn(testUser);
 
         ResponseEntity<User> response = adminController.getUserById(1L);
 
@@ -68,7 +68,7 @@ class AdminControllerTest {
 
     @Test
     void getUserById_returns404_whenUserNotFound() {
-        when(userRepository.getById(99L)).thenReturn(null);
+        when(userRepository.getUserById(99L)).thenReturn(null);
 
         ResponseEntity<User> response = adminController.getUserById(99L);
 

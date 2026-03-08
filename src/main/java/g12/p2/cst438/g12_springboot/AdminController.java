@@ -24,8 +24,8 @@ public class AdminController {
 
     // View a user's info by ID
     @GetMapping("/getUserById")
-    public ResponseEntity<User> getUserById(long id) {
-        User user = userRepository.getById(id);
+    public ResponseEntity<User> getUserById(Long id) {
+        User user = userRepository.getUserById(id);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
@@ -44,7 +44,7 @@ public class AdminController {
 
     // Delete a user
     @DeleteMapping("/deleteUser")
-    public ResponseEntity<Void> deleteUser(long id) {
+    public ResponseEntity<Void> deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }

@@ -22,12 +22,12 @@ public class WorkoutController {
     }
 
     @GetMapping("/getWorkoutById")
-    public Workout getWorkoutById(long id) {
+    public Workout getWorkoutById(Long id) {
         return workoutRepository.getById(id);
     }
 
     @GetMapping("/getWorkoutsByUser")
-    public List<Workout> getWorkoutsByUser(long userId) {
+    public List<Workout> getWorkoutsByUser(Long userId) {
         return workoutRepository.getByUserId(userId);
     }
 
@@ -47,7 +47,7 @@ public class WorkoutController {
     }
 
     @DeleteMapping("/deleteWorkout")
-    public ResponseEntity<Void> deleteWorkout(long id) {
+    public ResponseEntity<Void> deleteWorkout(Long id) {
         if (!workoutRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
