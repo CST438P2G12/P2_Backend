@@ -16,23 +16,34 @@ public class AdminController {
         this.userRepository = userRepository;
     }
 
-    // View all users
+    /**
+     * GET endpoint for getting all users in the DB.
+     * @return List with all the users currently in the database.
+     */
     @GetMapping("/getAllUsers")
     public List<User> getAllUsers() {
         return userRepository.getAllUsers();
     }
 
-    // View a user's info by ID
+    /**
+     * GET endpoint for getting a single user by their ID. 404s if user does not exist.
+     * @param id ID of the user to fetch
+     * @return User object with the given ID, or nothing/404 if the user is not found.
+     */
     @GetMapping("/getUserById")
-    public ResponseEntity<User> getUserById(long id) {
-        User user = userRepository.getById(id);
+    public ResponseEntity<User> getUserById(Long id) {
+        User user = userRepository.getUserById(id);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(user);
     }
 
-    // Edit a user's info
+    /**
+     * PUT endpoint for admins to update a user. 404s if user does not exist in DB.
+     * @param user User object to update.
+     * @return Updated user object, or nothing/404 if the user does not exist.
+     */
     @PutMapping("/updateUser")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         if (!userRepository.existsById(user.getId())) {
@@ -42,9 +53,13 @@ public class AdminController {
         return ResponseEntity.ok(updated);
     }
 
-    // Delete a user
+    /**
+     * DELETE endpoint for admins to delete a user. 404s if user does not exist in DB.
+     * @param id ID of the user to delete.
+     * @return HTTP 204 if success, 404 if failure.
+     */
     @DeleteMapping("/deleteUser")
-    public ResponseEntity<Void> deleteUser(long id) {
+    public ResponseEntity<Void> deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
