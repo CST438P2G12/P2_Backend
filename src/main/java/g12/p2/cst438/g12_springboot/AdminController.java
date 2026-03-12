@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -20,6 +24,13 @@ public class AdminController {
      * GET endpoint for getting all users in the DB.
      * @return List with all the users currently in the database.
      */
+    @Operation(
+            summary = "Admin: Get all users",
+            description = "Returns a list of all users in the system."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Users retrieved successfully")
+    })
     @GetMapping("/getAllUsers")
     public List<User> getAllUsers() {
         return userRepository.getAllUsers();
@@ -30,6 +41,14 @@ public class AdminController {
      * @param id ID of the user to fetch
      * @return User object with the given ID, or nothing/404 if the user is not found.
      */
+    @Operation(
+            summary = "Admin: Get user by ID",
+            description = "Returns a specific user's information based on ID."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "User found"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     @GetMapping("/getUserById")
     public ResponseEntity<User> getUserById(Long id) {
         User user = userRepository.getUserById(id);
@@ -44,6 +63,14 @@ public class AdminController {
      * @param user User object to update.
      * @return Updated user object, or nothing/404 if the user does not exist.
      */
+    @Operation(
+            summary = "Admin: Update user",
+            description = "Updates an existing user's information."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "User updated successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     @PutMapping("/updateUser")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         if (!userRepository.existsById(user.getId())) {
@@ -58,6 +85,14 @@ public class AdminController {
      * @param id ID of the user to delete.
      * @return HTTP 204 if success, 404 if failure.
      */
+    @Operation(
+            summary = "Admin: Delete user",
+            description = "Deletes a user based on ID."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "User deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     @DeleteMapping("/deleteUser")
     public ResponseEntity<Void> deleteUser(Long id) {
         if (!userRepository.existsById(id)) {

@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @RestController
 public class WorkoutController {
 
@@ -20,6 +24,13 @@ public class WorkoutController {
      * GET endpoint to get all Workouts present in the DB.
      * @return Java List with all workouts in the DB.
      */
+    @Operation(
+            summary = "Get all workouts",
+            description = "Returns a list of all workouts in the system."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Workouts retrieved successfully")
+    })
     @GetMapping("/getAllWorkouts")
     public List<Workout> getAllWorkouts() {
         return workoutRepository.getAllWorkouts();
@@ -30,6 +41,14 @@ public class WorkoutController {
      * @param id ID of the workout to get from the DB.
      * @return Workout object with the given ID, or an HTTP 404 if no such Workout exists.
      */
+    @Operation(
+            summary = "Get workout by ID",
+            description = "Returns a single workout based on its ID."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Workout found"),
+            @ApiResponse(responseCode = "404", description = "Workout not found")
+    })
     @GetMapping("/getWorkoutById")
     public ResponseEntity<Workout> getWorkoutById(Long id) {
         Workout workout = workoutRepository.getByWorkoutId(id);
@@ -44,6 +63,13 @@ public class WorkoutController {
      * @param userId ID of the User to get workouts for.
      * @return Java List of Workouts associated with the provided User ID, 404s if no such Workouts exist (or User DNE)
      */
+    @Operation(
+            summary = "Get workouts by user",
+            description = "Returns all workouts associated with a specific user ID."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Workouts retrieved successfully")
+    })
     @GetMapping("/getWorkoutsByUser")
     public ResponseEntity<List<Workout>> getWorkoutsByUser(Long userId) {
         List<Workout> workouts =  workoutRepository.getByUserId(userId);
@@ -58,6 +84,14 @@ public class WorkoutController {
      * @param workout New Workout object to add to the DB.
      * @return Java Workout object that was added.
      */
+    @Operation(
+            summary = "Add a workout",
+            description = "Creates a new workout entry."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Workout created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid workout data")
+    })
     @PostMapping("/addWorkout")
     public ResponseEntity<Workout> addWorkout(@RequestBody Workout workout) {
         Workout saved = workoutRepository.save(workout);
@@ -69,6 +103,14 @@ public class WorkoutController {
      * @param workout Updated Workout object to replace the old.
      * @return The newly-saved Workout object, or a 404 if no such Workout exists already.
      */
+    @Operation(
+            summary = "Update workout",
+            description = "Updates an existing workout."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Workout updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Workout not found")
+    })
     @PutMapping("/updateWorkout")
     public ResponseEntity<Workout> updateWorkout(@RequestBody Workout workout) {
         if (!workoutRepository.existsById(workout.getId())) {
@@ -83,6 +125,14 @@ public class WorkoutController {
      * @param id ID of the workout to be deleted
      * @return HTTP 204 on success, or 404 if no Workout with that ID exists in the DB.
      */
+    @Operation(
+            summary = "Delete workout",
+            description = "Deletes a workout by its ID."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Workout deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Workout not found")
+    })
     @DeleteMapping("/deleteWorkout")
     public ResponseEntity<Void> deleteWorkout(Long id) {
         if (!workoutRepository.existsById(id)) {
