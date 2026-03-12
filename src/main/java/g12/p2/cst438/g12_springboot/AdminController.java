@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -16,12 +20,27 @@ public class AdminController {
         this.userRepository = userRepository;
     }
 
+    @Operation(
+            summary = "Admin: Get all users",
+            description = "Returns a list of all users in the system."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Users retrieved successfully")
+    })
     // View all users
     @GetMapping("/getAllUsers")
     public List<User> getAllUsers() {
         return userRepository.getAllUsers();
     }
 
+    @Operation(
+            summary = "Admin: Get user by ID",
+            description = "Returns a specific user's information based on ID."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "User found"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     // View a user's info by ID
     @GetMapping("/getUserById")
     public ResponseEntity<User> getUserById(long id) {
@@ -32,6 +51,14 @@ public class AdminController {
         return ResponseEntity.ok(user);
     }
 
+    @Operation(
+            summary = "Admin: Update user",
+            description = "Updates an existing user's information."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "User updated successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     // Edit a user's info
     @PutMapping("/updateUser")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
@@ -42,6 +69,14 @@ public class AdminController {
         return ResponseEntity.ok(updated);
     }
 
+    @Operation(
+            summary = "Admin: Delete user",
+            description = "Deletes a user based on ID."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "User deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     // Delete a user
     @DeleteMapping("/deleteUser")
     public ResponseEntity<Void> deleteUser(long id) {
