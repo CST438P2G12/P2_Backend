@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @RestController
 public class GymLogController {
 
@@ -22,6 +26,14 @@ public class GymLogController {
      * @param id the ID of the requested User
      * @return a User object with the given ID
      */
+    @Operation(
+            summary = "Get user by ID",
+            description = "Returns a User with the given ID, if it exists."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "User retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     @GetMapping("/getUserById")
     public User user(long id) {
         return userRepository.getById(id);
@@ -31,6 +43,13 @@ public class GymLogController {
      * Returns all users currently in the database.
      * @return all current users in the database.
      */
+    @Operation(
+            summary = "Get all users",
+            description = "Returns all users currently in the database."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Users retrieved successfully")
+    })
     @GetMapping("/getAllUsers")
     public List<User> getAllUsers() {
         return userRepository.getAllUsers();
