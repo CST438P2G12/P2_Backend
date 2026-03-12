@@ -20,6 +20,10 @@ public class AdminController {
         this.userRepository = userRepository;
     }
 
+    /**
+     * GET endpoint for getting all users in the DB.
+     * @return List with all the users currently in the database.
+     */
     @Operation(
             summary = "Admin: Get all users",
             description = "Returns a list of all users in the system."
@@ -27,12 +31,16 @@ public class AdminController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Users retrieved successfully")
     })
-    // View all users
     @GetMapping("/getAllUsers")
     public List<User> getAllUsers() {
         return userRepository.getAllUsers();
     }
 
+    /**
+     * GET endpoint for getting a single user by their ID. 404s if user does not exist.
+     * @param id ID of the user to fetch
+     * @return User object with the given ID, or nothing/404 if the user is not found.
+     */
     @Operation(
             summary = "Admin: Get user by ID",
             description = "Returns a specific user's information based on ID."
@@ -41,16 +49,20 @@ public class AdminController {
             @ApiResponse(responseCode = "200", description = "User found"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
-    // View a user's info by ID
     @GetMapping("/getUserById")
-    public ResponseEntity<User> getUserById(long id) {
-        User user = userRepository.getById(id);
+    public ResponseEntity<User> getUserById(Long id) {
+        User user = userRepository.getUserById(id);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(user);
     }
 
+    /**
+     * PUT endpoint for admins to update a user. 404s if user does not exist in DB.
+     * @param user User object to update.
+     * @return Updated user object, or nothing/404 if the user does not exist.
+     */
     @Operation(
             summary = "Admin: Update user",
             description = "Updates an existing user's information."
@@ -59,7 +71,6 @@ public class AdminController {
             @ApiResponse(responseCode = "200", description = "User updated successfully"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
-    // Edit a user's info
     @PutMapping("/updateUser")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         if (!userRepository.existsById(user.getId())) {
@@ -69,6 +80,11 @@ public class AdminController {
         return ResponseEntity.ok(updated);
     }
 
+    /**
+     * DELETE endpoint for admins to delete a user. 404s if user does not exist in DB.
+     * @param id ID of the user to delete.
+     * @return HTTP 204 if success, 404 if failure.
+     */
     @Operation(
             summary = "Admin: Delete user",
             description = "Deletes a user based on ID."
@@ -77,9 +93,8 @@ public class AdminController {
             @ApiResponse(responseCode = "204", description = "User deleted successfully"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
-    // Delete a user
     @DeleteMapping("/deleteUser")
-    public ResponseEntity<Void> deleteUser(long id) {
+    public ResponseEntity<Void> deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }

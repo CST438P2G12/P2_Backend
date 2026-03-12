@@ -1,6 +1,7 @@
 package g12.p2.cst438.g12_springboot.entities;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
 @Entity
@@ -9,54 +10,48 @@ public class Workout {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long workoutId;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "userId", nullable = false)
+    private User user;
 
     @Column(nullable = false)
     private LocalDate date;
 
-    @Column(nullable = false)
-    private int sets;
+    protected Workout() {}
 
-    @Column(name = "reps_per_set", nullable = false)
-    private int repsPerSet;
-
-    @Column(name = "duration_minutes", nullable = false)
-    private int durationMinutes;
-
-    @Column
-    private String notes;
-
-    public Workout() {}
-
-    public Workout(Long userId, LocalDate date, int sets, int repsPerSet, int durationMinutes, String notes) {
-        this.userId = userId;
+    /**
+     * Public constructor for Workout. Takes a User object and a LocalDate of the workout.
+     * @param user User that added the Workout.
+     * @param date Date of the Workout.
+     */
+    public Workout(User user, LocalDate date) {
+        this.user = user;
         this.date = date;
-        this.sets = sets;
-        this.repsPerSet = repsPerSet;
-        this.durationMinutes = durationMinutes;
-        this.notes = notes;
     }
 
-    public Long getId() { return id; }
+    /**
+     * Getter for the Workout's ID.
+     * @return ID of the requested workout.
+     */
+    public Long getId() { return workoutId; }
 
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
+    /**
+     * Gets the user correlated with a particular workout.
+     * @return User object that added the workout.
+     */
+    public User getUser() { return user; }
 
+    /**
+     * Getter for the date of the workout.
+     * @return LocalDate type with the date of the workout.
+     */
     public LocalDate getDate() { return date; }
+
+    /**
+     * Setter for the workout's date
+     * @param date LocalDate type with the new date to set.
+     */
     public void setDate(LocalDate date) { this.date = date; }
-
-    public int getSets() { return sets; }
-    public void setSets(int sets) { this.sets = sets; }
-
-    public int getRepsPerSet() { return repsPerSet; }
-    public void setRepsPerSet(int repsPerSet) { this.repsPerSet = repsPerSet; }
-
-    public int getDurationMinutes() { return durationMinutes; }
-    public void setDurationMinutes(int durationMinutes) { this.durationMinutes = durationMinutes; }
-
-    public String getNotes() { return notes; }
-    public void setNotes(String notes) { this.notes = notes; }
 }
