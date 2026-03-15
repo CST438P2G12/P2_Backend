@@ -17,10 +17,20 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
 
+    /**
+     * Constructor for CustomOAuth2UserService.
+     * @param userRepository UserRepository for DB queries to check admin privileges and add user in if they don't exist.
+     */
     public CustomOAuth2UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Overridden loadUser method that will check the DB for the logged-in user, and add them if they do not exist.
+     * @param userRequest Request to the userInfo endpoint, used to load in an OAuth2User.
+     * @return an OAuth2User with the appropriate privileges for their level of access.
+     * @throws OAuth2AuthenticationException Not implemented.
+     */
     @Override
     public OAuth2User loadUser(@AuthenticationPrincipal OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
