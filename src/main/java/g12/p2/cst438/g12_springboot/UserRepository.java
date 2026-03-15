@@ -23,4 +23,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     @Query(value = "DELETE FROM \"User\" WHERE id = :id", nativeQuery = true)
     void deleteById(Long id);
+
+    @Query(value = "SELECT * FROM \"User\" WHERE email = :email", nativeQuery = true)
+    User getUserByEmail(String email);
+
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO \"User\" (name, email) VALUES (:#{#user.name}, :#{#user.email})", nativeQuery = true)
+    void insertUser(User user);
+
+    @Query(value = "SELECT EXISTS(SELECT 1 FROM \"User\" WHERE email = :email)", nativeQuery = true)
+    boolean existsByEmail(String email);
+
+    @Query(value = "SELECT \"isAdmin\" FROM \"User\" WHERE email = :email", nativeQuery = true)
+    boolean isAdmin(String email);
 }

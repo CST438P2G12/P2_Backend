@@ -30,7 +30,7 @@ public class WorkoutControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        user = new User("Test User");
+        user = new User("Test User", "test@test.com");
         workout = new Workout(user, LocalDate.of(1900, 1, 1));
     }
 
