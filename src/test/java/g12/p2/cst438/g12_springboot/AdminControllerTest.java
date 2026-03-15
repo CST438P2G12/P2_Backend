@@ -12,8 +12,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class AdminControllerTest {
@@ -29,19 +28,20 @@ class AdminControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        testUser = new User("TestUser");
+        testUser = new User("TestUser", "test@test.com");
     }
 
     // --- getAllUsers ---
 
     @Test
     void getAllUsers_returnsListOfUsers() {
-        List<User> users = Arrays.asList(new User("Alice"), new User("Bob"));
+        List<User> users = Arrays.asList(new User("Alice", "test@test.com"), new User("Bob", "test@test.com"));
         when(userRepository.getAllUsers()).thenReturn(users);
 
-        List<User> result = adminController.getAllUsers();
+        ResponseEntity<List<User>> result = adminController.getAllUsers();
 
-        assertEquals(2, result.size());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(users, result.getBody());
         verify(userRepository, times(1)).getAllUsers();
     }
 
@@ -49,9 +49,9 @@ class AdminControllerTest {
     void getAllUsers_returnsEmptyList_whenNoUsers() {
         when(userRepository.getAllUsers()).thenReturn(List.of());
 
-        List<User> result = adminController.getAllUsers();
+        ResponseEntity<List<User>> result = adminController.getAllUsers();
 
-        assertTrue(result.isEmpty());
+        assertEquals(true, result.getBody().isEmpty());
     }
 
     // --- getUserById ---
@@ -79,7 +79,7 @@ class AdminControllerTest {
 
     @Test
     void updateUser_returnsUpdatedUser_whenUserExists() {
-        when(userRepository.existsById(testUser.getId())).thenReturn(true);
+        when(userRepository.existsByEmail(testUser.getEmail())).thenReturn(true);
         when(userRepository.save(testUser)).thenReturn(testUser);
 
         ResponseEntity<User> response = adminController.updateUser(testUser);
@@ -91,7 +91,7 @@ class AdminControllerTest {
 
     @Test
     void updateUser_returns404_whenUserNotFound() {
-        when(userRepository.existsById(testUser.getId())).thenReturn(false);
+        when(userRepository.existsByEmail("test@test.com")).thenReturn(false);
 
         ResponseEntity<User> response = adminController.updateUser(testUser);
 
@@ -103,22 +103,21 @@ class AdminControllerTest {
 
     @Test
     void deleteUser_returns204_whenUserExists() {
-        when(userRepository.existsById(1L)).thenReturn(true);
-        doNothing().when(userRepository).deleteById(1L);
+        when(userRepository.existsByEmail("test@test.com")).thenReturn(true);
 
-        ResponseEntity<Void> response = adminController.deleteUser(1L);
+        ResponseEntity<Void> response = adminController.deleteUser("test@test.com");
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(userRepository, times(1)).deleteById(1L);
+        verify(userRepository, times(1)).delete(userRepository.getUserByEmail(testUser.getEmail()));
     }
 
     @Test
     void deleteUser_returns404_whenUserNotFound() {
-        when(userRepository.existsById(99L)).thenReturn(false);
+        when(userRepository.existsByEmail("test@test.com")).thenReturn(false);
 
-        ResponseEntity<Void> response = adminController.deleteUser(99L);
+        ResponseEntity<Void> response = adminController.deleteUser("test@test.com");
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(userRepository, never()).deleteById(anyLong());
+        verify(userRepository, never()).delete(userRepository.getUserByEmail("test@test.com"));
     }
 }
