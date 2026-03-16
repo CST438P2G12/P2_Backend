@@ -1,9 +1,14 @@
 package g12.p2.cst438.g12_springboot;
 
 import g12.p2.cst438.g12_springboot.entities.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,8 +37,8 @@ public class AdminController {
             @ApiResponse(responseCode = "200", description = "Users retrieved successfully")
     })
     @GetMapping("/getAllUsers")
-    public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userRepository.getAllUsers());
     }
 
     /**
@@ -73,7 +78,7 @@ public class AdminController {
     })
     @PutMapping("/updateUser")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
-        if (!userRepository.existsById(user.getId())) {
+        if (!userRepository.existsByEmail(user.getEmail())) {
             return ResponseEntity.notFound().build();
         }
         User updated = userRepository.save(user);
@@ -82,7 +87,7 @@ public class AdminController {
 
     /**
      * DELETE endpoint for admins to delete a user. 404s if user does not exist in DB.
-     * @param id ID of the user to delete.
+     * @param email Email of the user to delete.
      * @return HTTP 204 if success, 404 if failure.
      */
     @Operation(
@@ -94,11 +99,11 @@ public class AdminController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @DeleteMapping("/deleteUser")
-    public ResponseEntity<Void> deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
+    public ResponseEntity<Void> deleteUser(String email) {
+        if (!userRepository.existsByEmail(email)) {
             return ResponseEntity.notFound().build();
         }
-        userRepository.deleteById(id);
+        userRepository.delete(userRepository.getUserByEmail(email));
         return ResponseEntity.noContent().build();
     }
 }

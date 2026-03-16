@@ -1,18 +1,17 @@
 package g12.p2.cst438.g12_springboot.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private String name;
+
+    private String email;
 
     private boolean isAdmin;
 
@@ -23,8 +22,9 @@ public class User {
      * Constructor for a User object. Initializes a User with the given name and defaults user to not an admin.
      * @param name Profile name of the User
      */
-    public User(String name) {
+    public User(String name, String email) {
         this.name = name;
+        this.email = email;
         this.isAdmin = false;
     }
 
@@ -63,5 +63,13 @@ public class User {
      */
     public boolean isAdmin() {
         return isAdmin;
+    }
+
+    /**
+     * Getter for User's email.
+     * @return User's email
+     */
+    public String getEmail() {
+        return email;
     }
 }
