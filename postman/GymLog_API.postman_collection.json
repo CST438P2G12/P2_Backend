@@ -1,0 +1,412 @@
+{
+  "info": {
+    "name": "GymLog API",
+    "_postman_id": "gymlog-api-collection",
+    "description": "Complete API collection for the GymLog Spring Boot backend. Covers all user, admin, and workout endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/getAllUsers",
+              "host": ["{{baseUrl}}"],
+              "path": ["getAllUsers"]
+            },
+            "description": "Returns a list of all users in the database."
+          },
+          "response": [
+            {
+              "name": "200 OK - List of users",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "[{\"id\":1,\"name\":\"Alice\",\"admin\":false},{\"id\":2,\"name\":\"Bob\",\"admin\":true}]"
+            }
+          ]
+        },
+        {
+          "name": "Get User By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/getUserById?id=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["getUserById"],
+              "query": [{ "key": "id", "value": "1" }]
+            },
+            "description": "Returns a single user by their ID."
+          },
+          "response": [
+            {
+              "name": "200 OK - User found",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\"id\":1,\"name\":\"Alice\",\"admin\":false}"
+            }
+          ]
+        },
+        {
+          "name": "Edit Profile (change name)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/editProfile?id=1&name=AliceUpdated",
+              "host": ["{{baseUrl}}"],
+              "path": ["editProfile"],
+              "query": [
+                { "key": "id", "value": "1" },
+                { "key": "name", "value": "AliceUpdated" }
+              ]
+            },
+            "description": "Allows a user to update their own display name."
+          },
+          "response": [
+            {
+              "name": "200 OK - Profile updated",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\"id\":1,\"name\":\"AliceUpdated\",\"admin\":false}"
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "header": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "Delete My Account",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/deleteMyAccount?id=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["deleteMyAccount"],
+              "query": [{ "key": "id", "value": "1" }]
+            },
+            "description": "Allows a user to delete their own account."
+          },
+          "response": [
+            {
+              "name": "200 OK - Account deleted",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "text/plain" }],
+              "body": "Account successfully deleted."
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "header": [],
+              "body": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Admin - Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/getAllUsers",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "getAllUsers"]
+            },
+            "description": "Admin endpoint to retrieve all registered users."
+          },
+          "response": [
+            {
+              "name": "200 OK - All users",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "[{\"id\":1,\"name\":\"Alice\",\"admin\":false},{\"id\":2,\"name\":\"Bob\",\"admin\":true}]"
+            }
+          ]
+        },
+        {
+          "name": "Admin - Get User By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/getUserById?id=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "getUserById"],
+              "query": [{ "key": "id", "value": "1" }]
+            },
+            "description": "Admin endpoint to view a specific user's information."
+          },
+          "response": [
+            {
+              "name": "200 OK - User found",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\"id\":1,\"name\":\"Alice\",\"admin\":false}"
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "header": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "Admin - Update User",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1,\n  \"name\": \"Alice Renamed\",\n  \"admin\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/updateUser",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "updateUser"]
+            },
+            "description": "Admin endpoint to update a user's name or admin status."
+          },
+          "response": [
+            {
+              "name": "200 OK - User updated",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\"id\":1,\"name\":\"Alice Renamed\",\"admin\":false}"
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "header": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "Admin - Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/deleteUser?id=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "deleteUser"],
+              "query": [{ "key": "id", "value": "1" }]
+            },
+            "description": "Admin endpoint to delete a user and all associated data."
+          },
+          "response": [
+            {
+              "name": "204 No Content - User deleted",
+              "status": "No Content",
+              "code": 204,
+              "header": [],
+              "body": ""
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "header": [],
+              "body": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Workouts",
+      "item": [
+        {
+          "name": "Add Workout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"date\": \"2026-03-18\",\n  \"sets\": 4,\n  \"repsPerSet\": 10,\n  \"durationMinutes\": 45,\n  \"notes\": \"Felt strong today\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/addWorkout",
+              "host": ["{{baseUrl}}"],
+              "path": ["addWorkout"]
+            },
+            "description": "Logs a new workout for a user."
+          },
+          "response": [
+            {
+              "name": "201 Created - Workout saved",
+              "status": "Created",
+              "code": 201,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"id\": 1,\n  \"userId\": 1,\n  \"date\": \"2026-03-18\",\n  \"sets\": 4,\n  \"repsPerSet\": 10,\n  \"durationMinutes\": 45,\n  \"notes\": \"Felt strong today\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get All Workouts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/getAllWorkouts",
+              "host": ["{{baseUrl}}"],
+              "path": ["getAllWorkouts"]
+            },
+            "description": "Returns all workouts in the database."
+          },
+          "response": [
+            {
+              "name": "200 OK - All workouts",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "[{\"id\":1,\"userId\":1,\"date\":\"2026-03-18\",\"sets\":4,\"repsPerSet\":10,\"durationMinutes\":45,\"notes\":\"Felt strong today\"}]"
+            }
+          ]
+        },
+        {
+          "name": "Get Workout By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/getWorkoutById?id=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["getWorkoutById"],
+              "query": [{ "key": "id", "value": "1" }]
+            },
+            "description": "Returns a single workout by its ID."
+          },
+          "response": [
+            {
+              "name": "200 OK - Workout found",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\"id\":1,\"userId\":1,\"date\":\"2026-03-18\",\"sets\":4,\"repsPerSet\":10,\"durationMinutes\":45,\"notes\":\"Felt strong today\"}"
+            }
+          ]
+        },
+        {
+          "name": "Get Workouts By User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/getWorkoutsByUser?userId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["getWorkoutsByUser"],
+              "query": [{ "key": "userId", "value": "1" }]
+            },
+            "description": "Returns all workouts belonging to a specific user."
+          },
+          "response": [
+            {
+              "name": "200 OK - User workouts",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "[{\"id\":1,\"userId\":1,\"date\":\"2026-03-18\",\"sets\":4,\"repsPerSet\":10,\"durationMinutes\":45,\"notes\":\"Felt strong today\"}]"
+            }
+          ]
+        },
+        {
+          "name": "Update Workout",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1,\n  \"userId\": 1,\n  \"date\": \"2026-03-18\",\n  \"sets\": 5,\n  \"repsPerSet\": 12,\n  \"durationMinutes\": 60,\n  \"notes\": \"Updated - pushed harder\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/updateWorkout",
+              "host": ["{{baseUrl}}"],
+              "path": ["updateWorkout"]
+            },
+            "description": "Updates an existing workout. Pass the full workout object including its ID."
+          },
+          "response": [
+            {
+              "name": "200 OK - Workout updated",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\"id\":1,\"userId\":1,\"date\":\"2026-03-18\",\"sets\":5,\"repsPerSet\":12,\"durationMinutes\":60,\"notes\":\"Updated - pushed harder\"}"
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "header": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "Delete Workout",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/deleteWorkout?id=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["deleteWorkout"],
+              "query": [{ "key": "id", "value": "1" }]
+            },
+            "description": "Deletes a workout by its ID."
+          },
+          "response": [
+            {
+              "name": "204 No Content - Workout deleted",
+              "status": "No Content",
+              "code": 204,
+              "header": [],
+              "body": ""
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "header": [],
+              "body": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
