@@ -33,11 +33,11 @@ https://p2-backend-7wbr.onrender.com/
 
 ## Swagger Docs
 
-*TODO*
+Available at `/swagger-ui.html` after starting the app
 
 ## Postman Collection
 
-*TODO*
+[Available here](./postman)
 
 ## Entity Relationship Diagram
 
